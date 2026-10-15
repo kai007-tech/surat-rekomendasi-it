@@ -5,36 +5,42 @@
     <title>Surat Rekomendasi IT — {{ $record->nomor_surat }}</title>
     {{-- Dompdf hanya membaca CSS di dokumen ini; tabel dipakai murni sebagai grid tanpa border --}}
     <style>
-        @page { margin: 36px 44px; }
-        body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #0f172a; }
+        @page { margin: 34px 40px; }
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 9.5pt; color: #0f172a; }
         table { width: 100%; border-collapse: collapse; border: none; }
         td { border: none; padding: 0; vertical-align: top; }
 
-        .title { font-size: 18pt; font-weight: bold; color: #0f172a; margin: 0; }
-        .subtitle { font-size: 9pt; color: #64748b; margin: 2px 0 10px 0; }
-        .nomor-label { font-weight: bold; font-size: 10pt; color: #0f172a; }
-        .nomor-value { font-weight: bold; font-size: 11pt; color: #0f172a; }
+        /* Header */
+        .title { font-size: 16pt; font-weight: bold; color: #0f172a; line-height: 1.1; margin: 0; }
+        .subtitle { font-size: 9pt; font-weight: normal; color: #64748b; margin: 2px 0 10px 0; }
+        .nomor-label { font-size: 9.5pt; font-weight: bold; color: #0f172a; }
+        .nomor-value { font-size: 11pt; font-weight: bold; color: #0f172a; margin-top: 3px; }
         .logo { text-align: right; }
-        .logo img { width: 140px; }
+        .logo img { width: 160px; }
 
-        .divider-dashed { border-bottom: 2px dashed #a0a0a0; margin: 12px 0; }
-        .divider-pink { border-bottom: 3.5px solid #e6007e; margin: 12px 0; }
+        /* Divider */
+        .divider-dashed { border-bottom: 2px dashed #a0a0a0; margin: 10px 0; }
+        .divider-pink { border-bottom: 3.5px solid #e6007e; margin: 10px 0; }
 
-        .label-navy { color: #1e3a8a; font-weight: bold; font-size: 10pt; }
-        .value-strong { color: #0f172a; font-size: 11pt; font-weight: bold; }
-        .label { font-weight: bold; color: #0f172a; }
-        .value { color: #334155; }
-        .row-gap td { padding-bottom: 12px; }
+        /* Petugas & jabatan: label dan value navy seperti acuan */
+        .petugas-label { font-size: 9.5pt; font-weight: bold; color: #1e3a8a; }
+        .petugas-value { font-size: 10.5pt; font-weight: bold; color: #1e3a8a; margin-top: 3px; }
 
-        .doc-title { margin-top: 14px; font-weight: bold; color: #0f172a; }
-        .doc-photo { width: 180px; max-height: 240px; margin-top: 6px; }
-        .keterangan { font-size: 9.5pt; line-height: 1.45; text-align: justify; color: #334155; margin-top: 4px; }
-        .col-gap { padding-right: 16px; }
+        /* Field umum */
+        .label { font-size: 9.5pt; font-weight: bold; color: #1e293b; }
+        .value { font-size: 9.5pt; font-weight: normal; color: #334155; line-height: 1.35; margin-top: 3px; }
+        .field { padding-bottom: 14px; }
 
-        .signature { margin-top: 40px; }
-        .signature-line { border-bottom: 3.5px solid #e6007e; margin-bottom: 12px; }
-        .signature-box { text-align: center; }
+        /* Dokumentasi rata kiri */
+        .doc-photo { max-width: 180px; max-height: 220px; margin-top: 4px; }
+
+        /* Tanda tangan: garis pink di atas, teks rata tengah */
+        .signature { margin-top: 70px; }
+        .signature-line { border-bottom: 3.5px solid #e6007e; margin-bottom: 14px; }
+        .signature-box { text-align: center; font-size: 9.5pt; font-weight: bold; color: #0f172a; }
+        .signature-jabatan { margin-top: 8px; }
         .signature-space { height: 70px; }
+        .signature-name { font-size: 10pt; color: #0f172a; }
     </style>
 </head>
 <body>
@@ -43,11 +49,11 @@
         <tr>
             <td>
                 <h1 class="title">SURAT REKOMENDASI IT</h1>
-                <p class="subtitle">Surat rekomendasi terkait upgrade atau pergantian perangkat</p>
+                <p class="subtitle">Surat rekomendasi terkait <em>upgrade</em> atau pergantian perangkat</p>
                 <div class="nomor-label">Nomor Surat</div>
                 <div class="nomor-value">{{ $record->nomor_surat }}</div>
             </td>
-            <td class="logo">
+            <td class="logo" width="35%">
                 <img src="{{ public_path('images/logo-syifa.jpeg') }}" alt="Logo Syifa Global Group">
             </td>
         </tr>
@@ -58,13 +64,13 @@
     {{-- PETUGAS & JABATAN --}}
     <table>
         <tr>
-            <td width="50%">
-                <span class="label-navy">Nama Petugas</span><br>
-                <span class="value-strong">{{ $record->nama_petugas->value }}</span>
+            <td width="40%">
+                <div class="petugas-label">Nama Petugas</div>
+                <div class="petugas-value">{{ $record->nama_petugas->value }}</div>
             </td>
-            <td width="50%">
-                <span class="label-navy">Jabatan</span><br>
-                <span class="value-strong">{{ $record->jabatan_petugas }}</span>
+            <td width="60%">
+                <div class="petugas-label">Jabatan</div>
+                <div class="petugas-value">{{ $record->jabatan_petugas }}</div>
             </td>
         </tr>
     </table>
@@ -74,72 +80,71 @@
     {{-- PERUSAHAAN, DEPARTEMEN & PENGGUNA --}}
     <table>
         <tr>
-            <td width="35%" class="col-gap">
-                <span class="label">Nama Perusahaan</span><br>
-                <span class="value">{{ $record->nama_perusahaan->value }}</span>
+            <td width="33%">
+                <div class="label">Nama Perusahaan</div>
+                <div class="value">{{ $record->nama_perusahaan->value }}</div>
             </td>
-            <td width="35%" class="col-gap">
-                <span class="label">Nama Instalasi/Departemen</span><br>
-                <span class="value">{{ $record->nama_departemen->value }}</span>
+            <td width="34%">
+                <div class="label">Nama Instalasi/Departemen</div>
+                <div class="value">{{ $record->nama_departemen->value }}</div>
             </td>
-            <td width="30%">
-                <span class="label">Nama Pengguna</span><br>
-                <span class="value">{{ $record->nama_pengguna }}</span>
+            <td width="33%">
+                <div class="label">Nama Pengguna</div>
+                <div class="value">{{ $record->nama_pengguna }}</div>
             </td>
         </tr>
     </table>
 
     <div class="divider-pink"></div>
 
-    {{-- PERANGKAT --}}
-    <table>
-        <tr class="row-gap">
-            <td width="33%" class="col-gap">
-                <span class="label">Jenis Perangkat</span><br>
-                <span class="value">{{ $record->jenis_perangkat }}</span>
-            </td>
-            <td width="33%" class="col-gap">
-                <span class="label">Merk Perangkat</span><br>
-                <span class="value">{{ $record->merk_perangkat }}</span>
-            </td>
-            <td width="34%">
-                <span class="label">Model Perangkat</span><br>
-                <span class="value">{{ $record->model_perangkat ?: '-' }}</span>
-            </td>
-        </tr>
-    </table>
-
-    {{-- SPESIFIKASI & DOKUMENTASI (kiri), KETERANGAN (kanan) --}}
+    {{-- Dua kolom: kiri (jenis, merk, spesifikasi, dokumentasi), kanan (model, keterangan, TTD) --}}
     <table>
         <tr>
-            <td width="45%" class="col-gap">
-                <span class="label">Spesifikasi Perangkat</span><br>
-                <span class="value">{!! nl2br(e($record->spesifikasi_perangkat ?: '-')) !!}</span>
+            <td width="50%">
+                <table>
+                    <tr>
+                        <td width="50%" class="field">
+                            <div class="label">Jenis Perangkat</div>
+                            <div class="value">{{ $record->jenis_perangkat }}</div>
+                        </td>
+                        <td width="50%" class="field">
+                            <div class="label">Merk Perangkat</div>
+                            <div class="value">{{ $record->merk_perangkat }}</div>
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="doc-title">Dokumentasi Perangkat</div>
+                <div class="field">
+                    <div class="label">Spesifikasi Perangkat</div>
+                    <div class="value">{!! nl2br(e($record->spesifikasi_perangkat ?: '-')) !!}</div>
+                </div>
+
+                <div class="label">Dokumentasi Perangkat</div>
                 @if($record->dokumentasi_perangkat)
                     <img class="doc-photo" src="{{ public_path('storage/' . $record->dokumentasi_perangkat) }}" alt="Dokumentasi perangkat">
+                @else
+                    <div class="value">-</div>
                 @endif
             </td>
-            <td width="55%">
-                <span class="label">Keterangan Rekomendasi</span><br>
-                <div class="keterangan">{!! nl2br(e($record->keterangan_rekomendasi)) !!}</div>
-            </td>
-        </tr>
-    </table>
+            <td width="50%">
+                <div class="field">
+                    <div class="label">Model Perangkat</div>
+                    <div class="value">{{ $record->model_perangkat ?: '-' }}</div>
+                </div>
 
-    {{-- TANDA TANGAN (kanan bawah): area kosong untuk TTD basah & stempel --}}
-    <table class="signature">
-        <tr>
-            <td width="55%"></td>
-            <td width="45%">
-                <div class="signature-line"></div>
-                <div class="signature-box">
-                    <div>{{ $record->tanggal_surat->locale('id')->translatedFormat('l, F d, Y') }}</div>
-                    <strong>{{ $record->jabatan_penandatangan }}</strong>
-                    <div class="signature-space"></div>
-                    <u><strong>{{ $record->nama_penandatangan }}</strong></u><br>
-                    <strong>{{ $record->nip_penandatangan }}</strong>
+                <div class="label">Keterangan Rekomendasi</div>
+                <div class="value">{!! nl2br(e($record->keterangan_rekomendasi)) !!}</div>
+
+                {{-- Area kosong untuk TTD basah & stempel --}}
+                <div class="signature">
+                    <div class="signature-line"></div>
+                    <div class="signature-box">
+                        <div>{{ $record->tanggal_surat->locale('id')->translatedFormat('l, F d, Y') }}</div>
+                        <div class="signature-jabatan">{{ $record->jabatan_penandatangan }}</div>
+                        <div class="signature-space"></div>
+                        <u><strong class="signature-name">{{ $record->nama_penandatangan }}</strong></u><br>
+                        {{ $record->nip_penandatangan }}
+                    </div>
                 </div>
             </td>
         </tr>
