@@ -37,16 +37,17 @@
         .field { padding-bottom: 19px; }
         .gap-right { padding-right: 8px; }
         .device-table td { padding-bottom: 19px; padding-right: 8px; }
+        .keterangan { margin-top: 18px; padding-bottom: 20px; } /* padding: tidak collapse dengan margin .signature */
 
         /* Dokumentasi rata kiri */
-        .doc-photo { display: block; max-width: 180px; max-height: 150px; width: auto; height: auto; object-fit: contain; margin-top: 4px; }
+        .doc-photo { display: block; max-width: 180px; max-height: 140px; width: auto; height: auto; object-fit: contain; margin-top: 4px; }
 
         /* Tanda tangan */
-        .signature { margin-top: 60px; }
+        .signature { margin-top: 80px; }
         .signature-line { border-bottom: 4px solid #e600d2; margin-bottom: 10px; }
         .signature-box { text-align: center; font-size: 10pt; font-weight: bold; color: #080808; line-height: 1.35; }
         .signature-date { margin-bottom: 6px; }
-        .signature-space { height: 55px; }
+        .signature-space { height: 65px; }
     </style>
 </head>
 <body>
@@ -137,12 +138,10 @@
                 @endif
             </td>
             <td width="50%">
-                <div class="field">
-                    <div class="label">Model Perangkat</div>
-                    <div class="value">{{ $record->model_perangkat ?: '-' }}</div>
-                </div>
+                <div class="label">Model Perangkat</div>
+                <div class="value">{{ $record->model_perangkat ?: '-' }}</div>
 
-                <div class="field">
+                <div class="keterangan">
                     <div class="label">Keterangan Rekomendasi</div>
                     <div class="value">{!! nl2br(e($record->keterangan_rekomendasi)) !!}</div>
                 </div>
