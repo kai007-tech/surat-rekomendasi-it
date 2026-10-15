@@ -37,17 +37,19 @@
         .field { padding-bottom: 19px; }
         .gap-right { padding-right: 8px; }
         .device-table td { padding-bottom: 19px; padding-right: 8px; }
-        .keterangan { margin-top: 18px; padding-bottom: 20px; } /* padding: tidak collapse dengan margin .signature */
+        .keterangan-label { margin-top: 14px; }
+        .keterangan-text { line-height: 1.35; color: #515565; }
 
         /* Dokumentasi rata kiri */
         .doc-photo { display: block; max-width: 180px; max-height: 140px; width: auto; height: auto; object-fit: contain; margin-top: 4px; }
 
-        /* Tanda tangan */
-        .signature { margin-top: 80px; }
-        .signature-line { border-bottom: 4px solid #e600d2; margin-bottom: 10px; }
-        .signature-box { text-align: center; font-size: 10pt; font-weight: bold; color: #080808; line-height: 1.35; }
-        .signature-date { margin-bottom: 6px; }
-        .signature-space { height: 65px; }
+        /* Tanda tangan: terkunci di kanan bawah halaman, tidak ikut panjang keterangan */
+        /* Dompdf: offset dihitung dari area konten (di dalam margin @page), jadi right: 0 = sejajar garis pink */
+        .signature { position: absolute; bottom: 40px; right: 0; width: 48%; }
+        .signature-line { border-bottom: 3.5px solid #e600d2; margin-bottom: 12px; }
+        .signature-box { text-align: center; font-size: 9.5pt; font-weight: bold; color: #080808; line-height: 1.35; }
+        .signature-date { margin-bottom: 4px; }
+        .signature-space { height: 65px; } /* Ruang TTD basah / stempel */
     </style>
 </head>
 <body>
@@ -141,24 +143,22 @@
                 <div class="label">Model Perangkat</div>
                 <div class="value">{{ $record->model_perangkat ?: '-' }}</div>
 
-                <div class="keterangan">
-                    <div class="label">Keterangan Rekomendasi</div>
-                    <div class="value">{!! nl2br(e($record->keterangan_rekomendasi)) !!}</div>
-                </div>
-
-                {{-- Area kosong untuk TTD basah & stempel --}}
-                <div class="signature">
-                    <div class="signature-line"></div>
-                    <div class="signature-box">
-                        <div class="signature-date">{{ $record->tanggal_surat->locale('id')->translatedFormat('l, F d, Y') }}</div>
-                        <div>{{ $record->jabatan_penandatangan }}</div>
-                        <div class="signature-space"></div>
-                        <u>{{ $record->nama_penandatangan }}</u><br>
-                        {{ $record->nip_penandatangan }}
-                    </div>
-                </div>
+                <div class="label keterangan-label">Keterangan Rekomendasi</div>
+                <div class="value keterangan-text">{!! nl2br(e($record->keterangan_rekomendasi)) !!}</div>
             </td>
         </tr>
     </table>
+
+    {{-- Tanda tangan di luar tabel agar posisi absolute mengacu ke halaman --}}
+    <div class="signature">
+        <div class="signature-line"></div>
+        <div class="signature-box">
+            <div class="signature-date">{{ $record->tanggal_surat->locale('id')->translatedFormat('l, F d, Y') }}</div>
+            <div>{{ $record->jabatan_penandatangan }}</div>
+            <div class="signature-space"></div>
+            <u>{{ $record->nama_penandatangan }}</u><br>
+            {{ $record->nip_penandatangan }}
+        </div>
+    </div>
 </body>
 </html>
