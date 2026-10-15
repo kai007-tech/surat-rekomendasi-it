@@ -216,7 +216,7 @@ class SuratRekomendasiResource extends Resource
 
     public static function downloadPdf(SuratRekomendasi $surat): StreamedResponse
     {
-        $pdf = Pdf::loadView('pdf.surat-rekomendasi', ['surat' => $surat])->setPaper('a4');
+        $pdf = Pdf::loadView('pdf.surat-rekomendasi', ['record' => $surat])->setPaper('a4');
 
         return response()->streamDownload(function () use ($pdf): void {
             echo $pdf->output();

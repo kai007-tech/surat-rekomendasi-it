@@ -96,12 +96,12 @@ class SuratRekomendasiTest extends TestCase
         Carbon::setTestNow('2026-09-15');
         $surat = SuratRekomendasi::factory()->create()->fresh();
 
-        $html = view('pdf.surat-rekomendasi', ['surat' => $surat])->render();
+        $html = view('pdf.surat-rekomendasi', ['record' => $surat])->render();
 
-        $this->assertStringContainsString('Selasa, 15 September 2026', $html);
+        $this->assertStringContainsString('Selasa, September 15, 2026', $html);
         $this->assertStringContainsString('IT Supervisor PT. Syifa Global Group', $html);
         $this->assertStringContainsString('Lutfi Salisa Setiawati, S.Kom', $html);
-        $this->assertStringContainsString('NIP: 01122016017', $html);
+        $this->assertStringContainsString('01122016017', $html);
         $this->assertStringContainsString($surat->jabatan_petugas, $html);
     }
 }
