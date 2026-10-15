@@ -6,7 +6,7 @@
 
     {{-- Dompdf hanya membaca CSS di dokumen ini; tabel dipakai murni sebagai grid tanpa border --}}
     <style>
-        /* Margin 0 agar watermark menutupi kertas penuh; jarak tepi diatur .content-wrapper */
+        /* Margin 0 agar watermark membentang penuh A4; jarak tepi diatur .content-container */
         @page { size: A4 portrait; margin: 0; }
         * { box-sizing: border-box; }
         body { margin: 0; font-family: Helvetica, Arial, sans-serif; font-size: 9.5pt; color: #0b123b; }
@@ -14,11 +14,12 @@
         td { padding: 0; vertical-align: top; }
         h1, p { margin: 0; }
 
-        /* Watermark full page: fixed tidak ikut alur konten, jadi tidak memicu halaman ke-2 */
-        .watermark { position: fixed; top: 0; left: 0; width: 100%; height: 100%; text-align: center; z-index: -1; }
-        .watermark img { width: 100%; margin-top: 150px; opacity: 0.07; }
+        /* Watermark full A4: fixed tidak ikut alur konten, jadi tidak memicu halaman ke-2.
+           Logo persegi diletakkan di tengah selebar halaman agar tidak gepeng. */
+        .bg-watermark { position: fixed; top: 0; left: 0; width: 100%; height: 100%; text-align: center; z-index: -1; }
+        .bg-watermark img { width: 100%; margin-top: 150px; opacity: 0.07; }
 
-        .content-wrapper { padding: 28px 36px; }
+        .content-container { padding: 28px 36px; }
 
         /* Header */
         .title { font-size: 19pt; font-weight: bold; color: #080d36; line-height: 1.2; margin-bottom: 8px; }
@@ -29,8 +30,8 @@
         .logo { width: 165px; }
 
         /* Garis */
-        .divider-dashed { border-bottom: 4px dashed #a0a0a0; margin: 6px 0; }
-        .divider-pink { border-bottom: 4px solid #e600d2; margin: 6px 0; }
+        .divider-dashed { border-bottom: 4px dashed #a0a0a0; margin: 8px 0; }
+        .divider-pink { border-bottom: 4px solid #e600d2; margin: 8px 0; }
 
         /* Petugas & jabatan */
         .petugas-label { font-size: 11pt; font-weight: bold; color: #10177a; }
@@ -43,10 +44,10 @@
         .gap-right { padding-right: 8px; }
 
         /* Dokumentasi rata kiri, tinggi dibatasi agar tetap 1 halaman */
-        .doc-photo { display: block; max-width: 180px; max-height: 130px; margin-top: 4px; }
+        .doc-photo { display: block; max-width: 180px; max-height: 120px; margin-top: 4px; }
 
         /* Tanda tangan */
-        .signature { margin-top: 22px; }
+        .signature { margin-top: 20px; }
         .signature-line { border-bottom: 4px solid #e600d2; margin-bottom: 10px; }
         .signature-box { text-align: center; font-size: 10pt; font-weight: bold; color: #080808; line-height: 1.35; }
         .signature-date { margin-bottom: 6px; }
@@ -55,12 +56,12 @@
 </head>
 <body>
     @if(file_exists(public_path('images/logo-watermark.png')))
-        <div class="watermark">
+        <div class="bg-watermark">
             <img src="{{ public_path('images/logo-watermark.png') }}" alt="">
         </div>
     @endif
 
-    <div class="content-wrapper">
+    <div class="content-container">
         {{-- HEADER: judul & nomor surat kiri, logo kanan --}}
         <table>
             <tr>
