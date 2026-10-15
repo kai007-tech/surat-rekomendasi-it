@@ -25,7 +25,36 @@ Setiap kali mengedit atau membuat file Filament Resource, WAJIB mengikuti aturan
 ### A. Tipe Data Property Navigation Icon
 Bentuk type-hinting pada `$navigationIcon` WAJIB ditulis persis seperti ini agar tidak memicu Fatal Error di PHP 8.3:
 ```php
-protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-folder';
+
+# Context Project: Surat Rekomendasi IT
+
+## Status Active Scope
+- Modul Project Monitoring: Selesai (10 unit tests PASS).
+- Modul Aktif Saat Ini: **Surat Rekomendasi IT** (Internal Administrative Tool).
+- Target Git Repository: `https://github.com/kai007-tech/surat-rekomendasi-it.git`
+- Target Branch: `dev`
+- Local Database: `monitoring-sgg` (Modular & Standalone).
+
+## Spesifikasi Arsitektur Modul Surat Rekomendasi IT
+- **Panel Filament:** Filament v5 multi-panel terpisah di URL `/surat_rekomendasi`.
+- **Autentikasi:** Berbasis tabel `users` utama (panel terisolasi tanpa halaman publik).
+- **Master Data (Enum Murni):**
+  - `PetugasEnum`: Auto-fill `jabatan_petugas` secara otomatis saat `nama_petugas` dipilih.
+  - `PerusahaanEnum` & `DepartemenEnum`: Dependent select pada form input.
+- **Database & Model:**
+  - Tabel utama: `surat_rekomendasi` (murni 1 tabel transaksi tanpa tabel master terpisah).
+  - Penomoran surat diisi manual, tanggal surat otomatis berdasarkan tanggal pembuatan (`created_at`).
+- **Form Layout:**
+  - Komponen input menggunakan `Select` dropdown (tanpa radio button).
+  - Tata letak menggunakan `Grid::make(2)` dan garis pemisah putus-putus (*dashed divider*).
+- **Export PDF (Dompdf):**
+  - Package: `barryvdh/laravel-dompdf`.
+  - Template: `resources/views/pdf/surat-rekomendasi.blade.php` berbasis tabel HTML murni.
+  - Footer TTD: Menyediakan area kosong tinggi 60–80px khusus tanda tangan basah dan stempel fisik.
+  - Data Penandatangan Statis: Lutfi Salisa Setiawati, S.Kom / NIP: 01122016017 / IT Supervisor PT. Syifa Global Group.
+- **Workflow Testing & Version Control:**
+  - Unit test di `tests/Feature/SuratRekomendasiTest.php`.
+  - Commit dan push otomatis ke remote `https://github.com/kai007-tech/surat-rekomendasi-it.git` pada branch `dev`.
 
 ===
 
