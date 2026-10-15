@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Filament\SuratRekomendasi\Resources\SuratRekomendasiResource;
 use App\Filament\SuratRekomendasi\Resources\SuratRekomendasiResource\Pages\CreateSuratRekomendasi;
+use App\Filament\SuratRekomendasi\Resources\SuratRekomendasiResource\Pages\EditSuratRekomendasi;
 use App\Filament\SuratRekomendasi\Resources\SuratRekomendasiResource\Pages\ListSuratRekomendasi;
 use App\Models\Departemen;
 use App\Models\Perusahaan;
@@ -78,6 +80,21 @@ class SuratRekomendasiTest extends TestCase
         // Surat lama tidak ikut berubah saat data master diganti
         $petugas->update(['jabatan' => 'IT Supervisor']);
         $this->assertSame('IT Support PT. Syifa Global Group', $surat->fresh()->jabatan_petugas);
+    }
+
+    public function test_saving_edit_form_redirects_back_to_list(): void
+    {
+        $surat = SuratRekomendasi::factory()->create();
+
+        Livewire::test(EditSuratRekomendasi::class, ['record' => $surat->getKey()])
+            ->fillForm(['nama_pengguna' => 'Pengguna Baru'])
+            ->call('save')
+            ->assertHasNoFormErrors()
+            ->assertRedirect(SuratRekomendasiResource::getUrl('index'));
+
+        $surat = $surat->fresh();
+        $this->assertSame('Pengguna Baru', $surat->nama_pengguna);
+        $this->assertSame('Lutfi Salisa Setiawati, S.Kom', $surat->nama_penandatangan);
     }
 
     public function test_departemen_must_belong_to_selected_perusahaan(): void

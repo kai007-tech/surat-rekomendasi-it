@@ -18,6 +18,12 @@ class EditSuratRekomendasi extends EditRecord
         return 'Surat rekomendasi terkait pengadaan perangkat IT';
     }
 
+    // Setelah Simpan kembali ke daftar surat
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

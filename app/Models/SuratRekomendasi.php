@@ -30,8 +30,6 @@ class SuratRekomendasi extends Model
         'keterangan_rekomendasi',
         'dokumentasi_perangkat',
         'tanggal_surat',
-        'nama_penandatangan',
-        'nip_penandatangan',
     ];
 
     protected $casts = [

@@ -182,22 +182,11 @@ class SuratRekomendasiResource extends Resource
                         ->maxSize(2048)
                         ->columnSpanFull(),
 
+                    // Nama & NIP penandatangan tidak diisi lewat form: memakai default kolom di migration
                     DatePicker::make('tanggal_surat')
                         ->label('Tanggal Surat')
                         ->default(now())
                         ->required(),
-
-                    TextInput::make('nama_penandatangan')
-                        ->label('Nama Penandatangan')
-                        ->default('Lutfi Salisa Setiawati, S.Kom')
-                        ->required()
-                        ->maxLength(255),
-
-                    TextInput::make('nip_penandatangan')
-                        ->label('NIP Penandatangan')
-                        ->default('01122016017')
-                        ->required()
-                        ->maxLength(255),
                 ]),
 
         ])->columns(1);
