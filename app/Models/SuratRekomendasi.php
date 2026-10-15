@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\DepartemenEnum;
-use App\Enums\PerusahaanEnum;
-use App\Enums\PetugasEnum;
 use Database\Factories\SuratRekomendasiFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,12 +16,12 @@ class SuratRekomendasi extends Model
 
     protected $table = 'surat_rekomendasi';
 
-    // Data penandatangan & tanggal surat tidak diisi lewat form (default migration / otomatis)
+    // nama_petugas, jabatan_petugas, nama_perusahaan, nama_departemen diisi otomatis dari master (lihat booted)
     protected $fillable = [
         'nomor_surat',
-        'nama_petugas',
-        'nama_perusahaan',
-        'nama_departemen',
+        'petugas_id',
+        'perusahaan_id',
+        'departemen_id',
         'nama_pengguna',
         'jenis_perangkat',
         'merk_perangkat',
@@ -31,20 +29,33 @@ class SuratRekomendasi extends Model
         'spesifikasi_perangkat',
         'keterangan_rekomendasi',
         'dokumentasi_perangkat',
+        'tanggal_surat',
+        'nama_penandatangan',
+        'nip_penandatangan',
     ];
 
     protected $casts = [
-        'nama_petugas' => PetugasEnum::class,
-        'nama_perusahaan' => PerusahaanEnum::class,
-        'nama_departemen' => DepartemenEnum::class,
         'tanggal_surat' => 'date',
     ];
 
     protected static function booted(): void
     {
-        // Jabatan selalu dari enum (bukan dari input form); tanggal surat = tanggal pembuatan
+        // Salin nama/jabatan dari master saat relasi dipilih/diganti, agar surat lama
+        // tetap tercetak sama walau data master kemudian diubah atau dihapus
         static::saving(function (SuratRekomendasi $surat) {
-            $surat->jabatan_petugas = $surat->nama_petugas->jabatan();
+            if ($surat->isDirty('petugas_id') && $surat->petugas) {
+                $surat->nama_petugas = $surat->petugas->nama;
+                $surat->jabatan_petugas = $surat->petugas->jabatan;
+            }
+
+            if ($surat->isDirty('perusahaan_id') && $surat->perusahaan) {
+                $surat->nama_perusahaan = $surat->perusahaan->nama;
+            }
+
+            if ($surat->isDirty('departemen_id') && $surat->departemen) {
+                $surat->nama_departemen = $surat->departemen->nama;
+            }
+
             $surat->model_perangkat = filled($surat->model_perangkat) ? $surat->model_perangkat : '-';
             $surat->tanggal_surat ??= today();
         });
@@ -63,6 +74,21 @@ class SuratRekomendasi extends Model
                 Storage::disk('public')->delete($surat->dokumentasi_perangkat);
             }
         });
+    }
+
+    public function petugas(): BelongsTo
+    {
+        return $this->belongsTo(Petugas::class);
+    }
+
+    public function perusahaan(): BelongsTo
+    {
+        return $this->belongsTo(Perusahaan::class);
+    }
+
+    public function departemen(): BelongsTo
+    {
+        return $this->belongsTo(Departemen::class);
     }
 
     // Nama file PDF aman (nomor surat biasanya mengandung "/")

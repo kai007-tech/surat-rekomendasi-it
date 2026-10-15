@@ -9,7 +9,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -29,11 +28,6 @@ class SuratRekomendasiPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#008A45'),
             ])
-            // CSS khusus panel ini (garis putus-putus form)
-            ->renderHook(
-                PanelsRenderHook::HEAD_END,
-                fn (): string => '<link rel="stylesheet" href="'.asset('css/surat-rekomendasi.css').'">',
-            )
             ->discoverResources(in: app_path('Filament/SuratRekomendasi/Resources'), for: 'App\Filament\SuratRekomendasi\Resources')
             ->discoverPages(in: app_path('Filament/SuratRekomendasi/Pages'), for: 'App\Filament\SuratRekomendasi\Pages')
             ->pages([])                      // Tanpa dashboard: langsung ke daftar surat

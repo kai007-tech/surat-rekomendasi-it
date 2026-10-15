@@ -1,7 +1,0 @@
-/* Panel Surat Rekomendasi IT: garis putus-putus pemisah antar seksi form */
-.sr-dashed-divider {
-    border: 0;
-    border-top: 2px dashed #d1d5db;
-    margin: 4px 0;
-}
-.dark .sr-dashed-divider { border-top-color: #374151; }

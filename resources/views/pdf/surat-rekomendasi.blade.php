@@ -79,7 +79,7 @@
         <tr>
             <td width="42%">
                 <div class="petugas-label">Nama Petugas</div>
-                <div class="petugas-value">{{ $record->nama_petugas->value }}</div>
+                <div class="petugas-value">{{ $record->nama_petugas }}</div>
             </td>
             <td width="58%">
                 <div class="petugas-label">Jabatan</div>
@@ -95,11 +95,11 @@
         <tr>
             <td width="34%" class="gap-right">
                 <div class="label">Nama Perusahaan</div>
-                <div class="value">{{ $record->nama_perusahaan->value }}</div>
+                <div class="value">{{ $record->nama_perusahaan }}</div>
             </td>
             <td width="33%" class="gap-right">
                 <div class="label">Nama Instalasi/Departemen</div>
-                <div class="value">{{ $record->nama_departemen->value }}</div>
+                <div class="value">{{ $record->nama_departemen }}</div>
             </td>
             <td width="33%">
                 <div class="label">Nama Pengguna</div>

@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Enums\DepartemenEnum;
-use App\Enums\PerusahaanEnum;
-use App\Enums\PetugasEnum;
+use App\Models\Departemen;
+use App\Models\Petugas;
 use App\Models\SuratRekomendasi;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,9 +21,10 @@ class SuratRekomendasiFactory extends Factory
     {
         return [
             'nomor_surat' => fake()->unique()->numerify('###/IT-SGG/X/2026'),
-            'nama_petugas' => fake()->randomElement(PetugasEnum::cases()),
-            'nama_perusahaan' => PerusahaanEnum::RSU_SYIFA_MEDIKA_BANJARBARU,
-            'nama_departemen' => DepartemenEnum::INSTALASI_FARMASI,
+            'petugas_id' => Petugas::factory(),
+            'departemen_id' => Departemen::factory(),
+            // Perusahaan mengikuti departemen agar pasangan selalu valid
+            'perusahaan_id' => fn (array $attributes) => Departemen::find($attributes['departemen_id'])->perusahaan_id,
             'nama_pengguna' => fake()->name(),
             'jenis_perangkat' => 'Laptop',
             'merk_perangkat' => fake()->randomElement(['Lenovo', 'Asus', 'HP']),
